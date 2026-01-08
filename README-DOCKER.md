@@ -20,12 +20,17 @@ sudo apt-get update
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 
-# Install Docker Compose
+# Install Docker Compose (new plugin version)
 sudo apt-get install docker-compose-plugin -y
 
-# Add user to docker group (optional, to run without sudo)
+# Add user to docker group (REQUIRED to run without sudo)
 sudo usermod -aG docker $USER
+
+# Apply changes immediately (or logout/login)
 newgrp docker
+
+# Verify Docker works
+docker ps
 ```
 
 ### 2. Clone and Setup
@@ -134,6 +139,25 @@ docker-compose exec a2a-server bash
 ```
 
 ## Troubleshooting
+
+### Docker Permission Denied Error
+
+If you see `PermissionError: [Errno 13] Permission denied`:
+
+**Option 1: Fix permissions (recommended)**
+```bash
+# Run the fix script
+./fix-docker-permissions.sh
+
+# Or manually:
+sudo usermod -aG docker $USER
+newgrp docker  # Apply immediately, or logout/login
+```
+
+**Option 2: Run with sudo**
+```bash
+sudo ./docker-start.sh
+```
 
 ### Container won't start
 

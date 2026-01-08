@@ -7,6 +7,19 @@ echo "=========================================="
 echo "🚀 Starting A2A Payments Intelligence Agent"
 echo "=========================================="
 
+# Check if user has Docker permissions
+if ! docker info > /dev/null 2>&1; then
+    echo "⚠️  Docker permission issue detected!"
+    echo ""
+    echo "You need to either:"
+    echo "  1. Run with sudo: sudo ./docker-start.sh"
+    echo "  2. Add user to docker group: sudo usermod -aG docker $USER"
+    echo "     Then logout and login again, or run: newgrp docker"
+    echo ""
+    echo "Attempting with sudo..."
+    exec sudo "$0" "$@"
+fi
+
 # Check if .env file exists
 if [ ! -f .env ]; then
     echo "⚠️  .env file not found!"
@@ -39,14 +52,24 @@ fi
 
 echo "✅ Environment variables validated"
 
+# Detect docker-compose command (docker compose or docker-compose)
+if command -v docker &> /dev/null && docker compose version &> /dev/null 2>&1; then
+    DOCKER_COMPOSE_CMD="docker compose"
+elif command -v docker-compose &> /dev/null; then
+    DOCKER_COMPOSE_CMD="docker-compose"
+else
+    echo "❌ docker-compose not found. Please install docker-compose."
+    exit 1
+fi
+
 # Build and start with docker-compose
 echo ""
 echo "Building Docker image..."
-docker-compose build
+$DOCKER_COMPOSE_CMD build
 
 echo ""
 echo "Starting container..."
-docker-compose up -d
+$DOCKER_COMPOSE_CMD up -d
 
 echo ""
 echo "=========================================="
@@ -54,15 +77,15 @@ echo "✅ Server started!"
 echo "=========================================="
 echo ""
 echo "Container status:"
-docker-compose ps
+$DOCKER_COMPOSE_CMD ps
 
 echo ""
 echo "View logs:"
-echo "  docker-compose logs -f"
+echo "  $DOCKER_COMPOSE_CMD logs -f"
 
 echo ""
 echo "Stop server:"
-echo "  docker-compose down"
+echo "  $DOCKER_COMPOSE_CMD down"
 
 echo ""
 echo "Agent card URL:"
