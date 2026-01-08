@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  a2a-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: payments-pop-intelligence-agent
+    ports:
+      - "10001:10001"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PAYMENTS_API_BASE_URL=${PAYMENTS_API_BASE_URL}
+      - HOST_OVERRIDE=${HOST_OVERRIDE:-http://localhost:10001}
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:10001/.well-known/agent-card.json"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - a2a-network
+
+networks:
+  a2a-network:
+    driver: bridge
+

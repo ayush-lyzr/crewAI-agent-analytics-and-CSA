@@ -1,0 +1,9 @@
+a2a-sdk>=0.3.0
+uvicorn>=0.34.2
+crewai
+python-dotenv
+click>=8.1.8
+starlette>=0.46.2
+sse-starlette>=2.3.5
+requests>=2.31.0
+
