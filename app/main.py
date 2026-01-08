@@ -30,6 +30,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Enable detailed logging for A2A components
+logging.getLogger('a2a').setLevel(logging.INFO)
+logging.getLogger('app.agent_executor').setLevel(logging.INFO)
+logging.getLogger('app.crew').setLevel(logging.INFO)
+
 
 @click.command()
 @click.option('--host', 'host', default='localhost', help='Host to bind the server to')

@@ -34,11 +34,16 @@ class CrewAIAgentExecutor(AgentExecutor):
         event_queue: EventQueue,
     ) -> None:
         """Execute the agent with the given context."""
-        logger.info(f"Received request - Task ID: {context.task_id}, Context ID: {context.context_id}")
+        logger.info("=" * 60)
+        logger.info(f"🚀 NEW REQUEST RECEIVED")
+        logger.info(f"Task ID: {context.task_id}")
+        logger.info(f"Context ID: {context.context_id}")
+        logger.info(f"Message ID: {context.message.id if hasattr(context.message, 'id') else 'N/A'}")
 
         # Extract user input from the request
         user_input = context.get_user_input()
-        logger.info(f"User input: {user_input[:100] if user_input else 'None'}...")
+        logger.info(f"User input: {user_input[:200] if user_input else 'None'}...")
+        logger.info("=" * 60)
 
         if not user_input or not user_input.strip():
             logger.error("Empty query received")
