@@ -69,6 +69,9 @@ def main(host, port):
         # Use HOST_OVERRIDE if set, otherwise use localhost for URL (even if binding to 0.0.0.0)
         if os.getenv('HOST_OVERRIDE'):
             agent_host_url = os.getenv('HOST_OVERRIDE')
+            # Ensure URL ends with / if not already
+            if not agent_host_url.endswith('/'):
+                agent_host_url = agent_host_url + '/'
         elif host == '0.0.0.0':
             # If binding to 0.0.0.0, use localhost in the agent card URL for accessibility
             agent_host_url = f'http://localhost:{port}/'
